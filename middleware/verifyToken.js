@@ -1,12 +1,16 @@
 import jwt from "jsonwebtoken";
+import { handleError } from "../utils/responsehandlers.js";
 
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
-  if (!token) return next(handleError(401, "unauthorized access!!"));
+  if (!token) return next(handleError(401, "Not authorized"));
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
-    if (err) return next(handleError(403, "Token is not valid!!"));
+    if (err) return next(handleError(403, "Invalid token"));
     req.userId = payload.id;
-    return res.status(200).json(success(200, "authrorized to go ahead"));
+    req.isAdmin = payload.isAdmin;
+    return next();
   });
 };
+
+export default verifyToken;

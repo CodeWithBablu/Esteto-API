@@ -3,7 +3,6 @@ import { handleError, success } from "../utils/responsehandlers.js";
 import jwt from "jsonwebtoken";
 
 import User from "../models/user.model.js";
-import { MongooseError } from "mongoose";
 
 const register = async (req, res, next) => {
   try {
@@ -34,7 +33,13 @@ const login = async (req, res, next) => {
 
   try {
     //check if user exists
-    const user = await User.findOne({ username: username });
+    console.log(username);
+    const regEx = new RegExp(username, 'i');
+    const user = await User.findOne({
+      $or: [
+        { username: { $regex: regEx } },
+        { email: { $regex: regEx } }],
+    });
 
     if (!user) return next(handleError(401, "Invalid Crendentials 🥵"));
 
@@ -44,7 +49,7 @@ const login = async (req, res, next) => {
       return next(handleError(401, "Invalid Crendentials 🥵"));
 
     //generate cookie token and send to user
-    const maxAge = 1000 * 60 * 10;
+    const maxAge = 1000 * 60 * 60 * 24;
 
     const generatedAccessToken = jwt.sign(
       {
@@ -55,7 +60,7 @@ const login = async (req, res, next) => {
       { expiresIn: maxAge }
     );
 
-    const { password: hashPassword, ...data } = user._doc;
+    const { password: _pass, ...userinfo } = user._doc;
     res
       .cookie("token", generatedAccessToken, {
         httpOnly: true,
@@ -63,7 +68,7 @@ const login = async (req, res, next) => {
         maxAge: maxAge,
       })
       .status(200)
-      .json(success(200, "Logged in successfully👏😍", data));
+      .json(success(200, "Logged in successfully👏😍", userinfo));
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Failed to login" });

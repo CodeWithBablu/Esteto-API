@@ -1,17 +1,23 @@
 import "dotenv/config";
 import "./utils/db.js";
 import express from "express";
-import authRoute from "./routes/auth.route.js";
-import testRoute from "./routes/test.route.js";
 import cookieParser from "cookie-parser";
+
+import authRoute from "./routes/auth.route.js";
+import userRoute from "./routes/user.route.js";
+import postRoute from "./routes/post.route.js";
+import testRoute from "./routes/test.route.js";
+
 // import postRoute from "./routes/post.route.js";
 const app = express();
 app.use(cookieParser());
-
 app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
 app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
+app.use("/api/post", postRoute);
 app.use("/api/test", testRoute);
 
 app.use((err, req, res, next) => {
