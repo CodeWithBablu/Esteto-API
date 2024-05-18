@@ -6,7 +6,7 @@ import User from "../models/user.model.js";
 
 const register = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, avatar } = req.body;
     const user = await User.findOne({ username, email });
 
     if (user) return next(handleError(501, "User already exists 🤨"));
@@ -16,6 +16,7 @@ const register = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
+      avatar: avatar
     });
 
     return res
