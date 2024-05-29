@@ -1,3 +1,4 @@
+import { Chat } from "../models/chat.model.js";
 import User from "../models/user.model.js";
 import { handleError, success } from "../utils/responsehandlers.js";
 import bcrypt from 'bcrypt';
@@ -98,4 +99,47 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export default { getUser, getUsers, updateUser, deleteUser, profilePosts };
+export const getLastSeen = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const user = await User.findById(id);
+    return res.status(200).json(success(200, `User last online at ${user.lastSeenAt}`, user.lastSeenAt));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to get user lastSeenAt" });
+  }
+};
+
+export const updateLastSeen = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const user = await User.findById(id);
+    user.lastSeenAt = Date.now();
+    await user.save();
+    return res.status(200).json(success(200, "LastseenAt time updated successfully 😭🙏", Date.now()));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to update user lastSeenAt" });
+  }
+};
+
+export const getNotificationCount = async (req, res, next) => {
+  try {
+    const tokenUserId = req.userId;
+
+    const chats = await Chat.find({
+      participants: { $in: [tokenUserId] },
+      seenBy: { $nin: [tokenUserId] }
+    });
+    const notificationCount = chats.length;
+    return res.status(200).json(success(200, "notification count fetched successfully 😭🙏", notificationCount));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to fetch notification count" });
+  }
+};
+
+
+export default { getUser, getUsers, updateUser, deleteUser, profilePosts, getLastSeen, updateLastSeen, getNotificationCount };

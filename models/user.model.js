@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
   },
+  lastSeenAt: {
+    type: Date,
+  },
   posts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Post"

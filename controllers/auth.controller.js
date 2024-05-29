@@ -16,7 +16,8 @@ const register = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
-      avatar: avatar
+      avatar: avatar,
+      lastSeenAt: Date.now(),
     });
 
     return res
@@ -60,6 +61,9 @@ const login = async (req, res, next) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: maxAge }
     );
+
+    user.lastSeenAt = Date.now();
+    await user.save();
 
     const { password: _pass, ...userinfo } = user._doc;
     res

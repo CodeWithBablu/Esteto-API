@@ -65,7 +65,7 @@ export const addChat = async (req, res, next) => {
   }
 }
 
-//handler
+//handler rreadChat
 export const readChat = async (req, res, next) => {
   const tokenUserId = req.userId;
 
@@ -75,7 +75,8 @@ export const readChat = async (req, res, next) => {
       participants: { $in: [tokenUserId] },
     });
 
-    chat.seenBy.push(tokenUserId);
+    if (!chat.seenBy.includes(tokenUserId))
+      chat.seenBy.push(tokenUserId);
     await chat.save();
 
     return res.status(200).json(success(200, "Here is your chat 👏😍", chat));

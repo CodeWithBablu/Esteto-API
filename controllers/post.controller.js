@@ -16,7 +16,7 @@ export const getPosts = async (req, res, next) => {
     queryConditions.type = query.type;
 
   if (query.city)
-    queryConditions.city = query.city;
+    queryConditions.city = query.city.toLowerCase();
 
   if (query.property)
     queryConditions.property = query.property;
