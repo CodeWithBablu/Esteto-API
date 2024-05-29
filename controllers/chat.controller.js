@@ -52,6 +52,14 @@ export const addChat = async (req, res, next) => {
   const tokenUserId = req.userId;
   const { recieverId, postId } = req.body;
   try {
+    // Check if a chat already exists between the two participants for the given post
+    const existingChat = await Chat.findOne({
+      participants: { $all: [tokenUserId, recieverId] },
+      post: postId,
+    });
+
+    if (existingChat) return res.status(200).json(success(200, "Chat already exists"));
+
     const newChat = await Chat.create({
       participants: [tokenUserId, recieverId],
       post: postId,

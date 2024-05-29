@@ -131,7 +131,10 @@ export const getNotificationCount = async (req, res, next) => {
 
     const chats = await Chat.find({
       participants: { $in: [tokenUserId] },
-      seenBy: { $nin: [tokenUserId] }
+      $and: [
+        { seenBy: { $size: 1 } },
+        { seenBy: { $nin: [tokenUserId] } }
+      ]
     });
     const notificationCount = chats.length;
     return res.status(200).json(success(200, "notification count fetched successfully 😭🙏", notificationCount));
