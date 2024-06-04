@@ -7,7 +7,13 @@ import User from "../models/user.model.js";
 const register = async (req, res, next) => {
   try {
     const { username, email, password, avatar } = req.body;
-    const user = await User.findOne({ username, email });
+
+    const user = await User.findOne({
+      $or: [
+        { username },
+        { email }
+      ]
+    });
 
     if (user) return next(handleError(501, "User already exists 🤨"));
 
@@ -24,7 +30,6 @@ const register = async (req, res, next) => {
       .status(200)
       .json(success(200, "User successfully onboarded 👏😍"));
   } catch (error) {
-    console.log(error);
     return next(handleError(500, "Failed to create user 🥵"));
   }
 };
@@ -35,7 +40,6 @@ const login = async (req, res, next) => {
 
   try {
     //check if user exists
-    console.log(username);
     const regEx = new RegExp(username, 'i');
     const user = await User.findOne({
       $or: [
@@ -75,7 +79,6 @@ const login = async (req, res, next) => {
       .status(200)
       .json(success(200, "Logged in successfully👏😍", userinfo));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to login" });
   }
 };

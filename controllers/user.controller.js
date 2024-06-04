@@ -8,7 +8,6 @@ export const getUsers = async (req, res, next) => {
     const users = await User.find();
     return res.status(200).json(success(200, "got them👏😍", users));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to get users!" });
   }
 };
@@ -23,7 +22,6 @@ export const getUser = async (req, res, next) => {
 
     res.status(200).json(success(200, "user found 👏😍", user));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to get user" });
   }
 };
@@ -41,7 +39,6 @@ export const profilePosts = async (req, res, next) => {
       return res.status(200).json(success(200, "profile posts fetched succesfully 👏😍", { userPosts, savedPosts }));
     }, 3000)
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to get the profile posts" });
   }
 }
@@ -79,7 +76,6 @@ export const updateUser = async (req, res, next) => {
     const { password: _pass, ...userinfo } = user._doc;
     return res.status(200).json(success(200, "User updated successfully👏😍", userinfo));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to update user" });
   }
 };
@@ -94,7 +90,6 @@ export const deleteUser = async (req, res, next) => {
 
     return res.status(200).json(success(200, "User deleted successfully 😭🙏"));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to delete user" });
   }
 };
@@ -106,7 +101,6 @@ export const getLastSeen = async (req, res, next) => {
     const user = await User.findById(id);
     return res.status(200).json(success(200, `User last online at ${user.lastSeenAt}`, user.lastSeenAt));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to get user lastSeenAt" });
   }
 };
@@ -120,7 +114,6 @@ export const updateLastSeen = async (req, res, next) => {
     await user.save();
     return res.status(200).json(success(200, "LastseenAt time updated successfully 😭🙏", Date.now()));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to update user lastSeenAt" });
   }
 };
@@ -136,10 +129,10 @@ export const getNotificationCount = async (req, res, next) => {
         { seenBy: { $nin: [tokenUserId] } }
       ]
     });
+
     const notificationCount = chats.length;
     return res.status(200).json(success(200, "notification count fetched successfully 😭🙏", notificationCount));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to fetch notification count" });
   }
 };

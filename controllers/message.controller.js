@@ -28,7 +28,6 @@ export const addMessage = async (req, res, next) => {
 
     return res.status(200).json(success(200, "Message sent successfully 👏😍", message));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to fetch all chats" });
   }
 }

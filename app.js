@@ -13,7 +13,7 @@ import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
 import testRoute from "./routes/test.route.js";
 
-var allowedOrigins = ["http://localhost:5173", "http://192.168.1.10:5173"];
+var allowedOrigins = ["http://localhost:5173", "http://172.20.10.8:5173"];
 
 const app = express();
 const server = http.createServer(app);
@@ -92,7 +92,6 @@ io.on("connection", (socket) => {
   socket.on('disconnect', () => {
     removeUser(socket.id);
     io.emit('updateUserList', onlineUsers);
-    console.log('A user disconnected:', socket.id);
   });
 
   socket.on('getUserStatus', (receiverId) => {

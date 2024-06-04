@@ -32,8 +32,8 @@ export const getPosts = async (req, res, next) => {
         },
         {
           price: {
-            $gte: parseInt(query.minPrice) || 0,
-            $lte: parseInt(query.maxPrice) || 1000000
+            $gte: parseInt(query.minPrice) || 1000,
+            $lte: parseInt(query.maxPrice) || (query.type === "rent" ? 2000000 : 1000000000)
           }
         }
       ]
@@ -61,7 +61,6 @@ export const getPosts = async (req, res, next) => {
     return res.status(200).json(success(200, "All posts onboard sir 👏😍", posts));
     // }, 3000);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to get the posts" });
   }
 }
@@ -87,7 +86,6 @@ export const getPost = async (req, res, next) => {
 
     return res.status(200).json(success(200, "Here is your post 👏😍", post));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to get the post" });
   }
 }
@@ -111,7 +109,6 @@ export const createPost = async (req, res, next) => {
     // await (await newPost.populate('postdetail')).populate('user');
     return res.status(200).json(success(200, "Post created successfully 👏😍"));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to create post" });
   }
 }
@@ -121,7 +118,6 @@ export const updatePost = (req, res, next) => {
   try {
     return res.status(200).json(success(200, "All posts onboard sir 👏😍"));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to update post" });
   }
 }
@@ -138,7 +134,6 @@ export const deletePost = async (req, res, next) => {
     await Post.findByIdAndDelete(id);
     return res.status(200).json(success(200, "Post deleted successfully 👏😍"));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Failed to delete post" });
   }
 }
@@ -170,7 +165,6 @@ export const savePost = async (req, res, next) => {
 
     return res.status(200).json(success(200, `${isSaved ? "Post unsaved" : "Post saved successfully 👏😍"}`));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: `${isSaved ? "Failed to unsave post" : "Failed to save Post"}` });
   }
 }
