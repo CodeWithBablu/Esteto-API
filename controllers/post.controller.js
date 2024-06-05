@@ -15,9 +15,6 @@ export const getPosts = async (req, res, next) => {
   if (query.type)
     queryConditions.type = query.type;
 
-  if (query.city)
-    queryConditions.city = query.city.toLowerCase();
-
   if (query.property)
     queryConditions.property = query.property;
 
@@ -28,7 +25,8 @@ export const getPosts = async (req, res, next) => {
     let posts = await Post.find({
       $and: [
         {
-          ...queryConditions
+          ...queryConditions,
+          city: new RegExp(query.city.toLowerCase(), 'i')
         },
         {
           price: {

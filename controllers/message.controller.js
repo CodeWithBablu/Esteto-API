@@ -6,7 +6,7 @@ export const addMessage = async (req, res, next) => {
   const tokenUserId = req.userId;
   const chatId = req.params.chatId;
   const text = req.body.text;
-
+  console.log(chatId)
   try {
     const chat = await Chat.findOne({
       _id: chatId,
