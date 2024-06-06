@@ -34,7 +34,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  console.log("Hey I am here. Running perfectly fine");
+  res.send(`<h1>hey I am here working fine!</h1>`)
 })
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
