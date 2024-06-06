@@ -13,27 +13,32 @@ import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
 import testRoute from "./routes/test.route.js";
 
-var allowedOrigins = ["http://localhost:5173", "http://172.20.10.8:5173", "http://192.168.1.10:5173"];
+// var allowedOrigins = ["http://localhost:5173", "http://172.20.10.8:5173", "http://192.168.1.10:5173"];
+// var allowedOrigins = JSON.parse(process.env.ALLOWED_ORIGINS);
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: true,
     methods: ['GET', 'POST'],
   },
 });
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  }
+  origin: true
 }));
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     console.log(origin);
+//     if (!origin) return callback(null, true);
+//     if (allowedOrigins.indexOf(origin) === -1) {
+//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));
 app.use(cookieParser());
 app.use(express.json());
 
@@ -115,5 +120,5 @@ app.use((err, req, res, next) => {
 
 server.listen(PORT, () => console.log(`Server running on port : ${PORT}`));
 
-
+export default app;
 

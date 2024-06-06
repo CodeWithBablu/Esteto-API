@@ -1,0 +1,4 @@
+PORT=
+ALLOWED_ORIGINS=`["http://localhost:5173","http://192.168.1.10:5173"]`
+DATABASE_URL=
+JWT_SECRET_KEY=
